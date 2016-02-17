@@ -31,22 +31,73 @@ public class State {
 	//if we only check for a goal when we atempt to 
 	//move a pawn so we dont have to go through all
 	//the row
+
 	/*
-	 * Has a particular player won the game
-	 * if isPlayerWhite is true we check if white has won
-	 * else we check if black has won
-	 * Returns true if the particular player has won
+	 * Get the state of the game
+	 * Returns 100 if white has won
+	 * Return 0 if black has won
+	 * Return 50 if there is a draw
+	 * Returns -1 if no one has won yet
 	 * */
-	public boolean hasPlayerWon(boolean isPlayerWhite)
+	public int getUtility(int boardWidth, int boardHeight)
 	{
-		//TODO finish this
-		if (isPlayerWhite)
+		for (int i = 0; i < boardWidth; i++)
 		{
-			
+			if (board[i][boardHeight-1] == BoardSquare.White)
+			{
+				return 100;
+			}
 		}
-		return false;
+		for (int i = 0; i < boardWidth; i++)
+		{
+			if (board[i][0] == BoardSquare.Black)
+			{
+				return 0;
+			}
+		}
+		//TODO if draw return 50
+		return -1;
 	}
-	
+
+	/* A state evaluation */
+	public int evaluate(int boardWidth, int boardHeight)
+	{
+		int heightOfMostAdvancedWhite = 0;
+		int heightOfMostAdvancedBlack = 0;
+
+		blackLoop:
+		for (int j = 0; j < boardHeight; j++)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.Black)
+				{
+					heightOfMostAdvancedBlack = j;
+					break blackLoop;
+				}
+			}
+		}
+
+		whiteLoop:
+		for (int j = boardHeight - 1; j >= 0; j--)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.White)
+				{
+					heightOfMostAdvancedWhite = j;
+					break whiteLoop;
+				}
+			}
+		}
+
+		int distMostAdvancedBlack = heightOfMostAdvancedBlack;
+		int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
+
+		return 50 - distMostAdvancedWhite + distMostAdvancedBlack;
+	}
+
+
 	public ArrayList<Move> getLegalMoves (String role, boolean isMyTurn) {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		
@@ -94,7 +145,6 @@ public class State {
 				}
 			}
 		}
-		
 		return moves;
 	}
 }
