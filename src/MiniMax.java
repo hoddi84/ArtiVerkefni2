@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class MiniMax {
-	public ArrayList<Moves> actions = new ArrayList<Moves>();
+	public ArrayList<Move> actions = new ArrayList<Move>();
 	public boolean isDraw = false;
 	int alpha, beta;
 	int score;
@@ -19,7 +19,7 @@ public class MiniMax {
 		}
 		
 		if(player)//max
-			for(Moves action : actions) 
+			for(Move action : actions)
 				score = MiniMax(level -1, !player, alpha, beta);
 				if (score > alpha) alpha = score;
 				if (alpha >= beta) break;  // beta cut-off

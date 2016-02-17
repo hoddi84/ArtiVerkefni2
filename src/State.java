@@ -27,6 +27,11 @@ public class State {
 		}
 	}
 	
+	public State makeCopy() {
+		//TODO Implement this.
+		return null;
+	}
+	
 	//TODO maybee it could increase performance
 	//if we only check for a goal when we atempt to 
 	//move a pawn so we dont have to go through all
@@ -105,9 +110,12 @@ public class State {
 			moves.add(new Move());
 			return moves;
 		}
-		
+
+		/* board.length skilar x gildinu.
+	 	   board[0].length skilar y gilidnu.
+		 */
 		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board.length; j++) {
+			for (int j = 0; j < board[0].length; j++) {
 				// White's turn
 				if (role.equals("white")) {
 					if (board[i][j] == BoardSquare.White) {
