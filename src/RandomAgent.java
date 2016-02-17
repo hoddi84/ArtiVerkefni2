@@ -9,6 +9,7 @@ public class RandomAgent implements Agent
 	private boolean myTurn; // whether it is this agent's turn or not
 	private int width, height; // dimensions of the board
 	
+	
 	/*
 		init(String role, int playclock) is called once before you have to select the first action. Use it to initialize the agent. role is either "white" or "BLACK" and playclock is the number of seconds after which nextAction must return.
 	*/
