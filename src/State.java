@@ -1,15 +1,9 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class State {
 	
 	public BoardSquare[][] board;
 	
-	public String getLegalActions(boolean whitesTurn)
-	{
-		//TOOD implement this
-		return "";
-	}
 	// Remark 0 in the array is 1 in the game board
 	public State(int width, int height)
 	{
@@ -53,8 +47,54 @@ public class State {
 		return false;
 	}
 	
-	public void getLegalMoves () {
+	public ArrayList<Move> getLegalMoves (String role, boolean isMyTurn) {
+		ArrayList<Move> moves = new ArrayList<Move>();
 		
-		return;
+		if (!isMyTurn) {
+			moves.add(new Move());
+			return moves;
+		}
+		
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board.length; j++) {
+				// White's turn
+				if (role.equals("white")) {
+					if (board[i][j] == BoardSquare.White) {
+						// One forward
+						if (board[i][j+1] == BoardSquare.Empty) {
+							moves.add(new Move(i, j, i, j+1));
+						}
+						// Capture left
+						if (board[i-1][j+1] == BoardSquare.Black) {
+							moves.add(new Move(i, j, i-1, j+1));
+						}
+						// Capture right
+						if (board[i+1][j+1] == BoardSquare.Black) {
+							moves.add(new Move(i, j, i+1, j+1));
+						}
+					}
+				}
+				
+				// Black's turn
+				if (role.equals("black")) {
+					if (board[i][j] == BoardSquare.Black) {
+						// One forward
+						if (board[i][j-1] == BoardSquare.Empty) {
+							moves.add(new Move(i, j, i, j-1));
+						}
+						// Capture left
+						if (board[i-1][j-1] == BoardSquare.White) {
+							moves.add(new Move(i, j, i-1, j-1));
+						}
+						// Capture right
+						if (board[i+1][j-1] == BoardSquare.White) {
+							moves.add(new Move(i, j, i+1, j-1));
+						}
+					}
+				}
+			}
+		}
+		
+		return moves;
 	}
 }
