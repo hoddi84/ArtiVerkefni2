@@ -7,6 +7,7 @@ public class State {
 	// Remark 0 in the array is 1 in the game board
 	public State(int width, int height)
 	{
+		board = new BoardSquare[width][height];
 		for (int i = 0; i < width; i++)
 		{
 			for (int j = 0; j < height; j++)
@@ -27,9 +28,21 @@ public class State {
 		}
 	}
 	
-	public State makeCopy() {
-		//TODO Implement this.
-		return null;
+	public State(BoardSquare[][] board)
+	{
+		this.board = board;
+	}
+	
+	/*
+	 * Get the state that results from a certain move
+	 * */
+	public State getNextState(Move move)
+	{
+		State newState = MakeCopy();
+		BoardSquare movingPawn = this.board[move.fromx-1][move.fromy-1];
+		newState.board[move.fromx-1][move.fromy-1] = BoardSquare.Empty;
+		newState.board[move.tox-1][move.toy-1] = movingPawn;
+		return newState;
 	}
 	
 	//TODO maybee it could increase performance
@@ -39,34 +52,66 @@ public class State {
 
 	/*
 	 * Get the state of the game
-	 * Returns 100 if white has won
-	 * Return 0 if black has won
+	 * Returns 100 if black has won
+	 * Return 0 if white has won
 	 * Return 50 if there is a draw
 	 * Returns -1 if no one has won yet
 	 * */
-	public int getUtility(int boardWidth, int boardHeight)
+	public int getUtility(boolean isMyTurn)
 	{
+		int boardWidth = this.board.length;
+		int boardHeight = this.board[0].length;
+		
 		for (int i = 0; i < boardWidth; i++)
 		{
 			if (board[i][boardHeight-1] == BoardSquare.White)
 			{
-				return 100;
+				return 0;
 			}
 		}
 		for (int i = 0; i < boardWidth; i++)
 		{
 			if (board[i][0] == BoardSquare.Black)
 			{
-				return 0;
+				return 100;
 			}
 		}
+		
+		//TODO maybee this is not necessary
+		ArrayList<Move> legalMoves = getLegalMoves (isMyTurn);
+		if (legalMoves.isEmpty())
+		{
+			return 50;
+		}
+			
 		//TODO if draw return 50
 		return -1;
 	}
 
-	/* A state evaluation */
-	public int evaluate(int boardWidth, int boardHeight)
+	public State MakeCopy()
 	{
+		int width = this.board.length;
+		int height = this.board[0].length;
+		BoardSquare[][] newBoard = new BoardSquare[width][height];
+		
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				newBoard[i][j] = this.board[i][j];
+			}
+		}
+		
+		State newState = new State(newBoard);
+		return newState;
+	}
+	
+	/* A state evaluation */
+	public int evaluate()
+	{
+		int boardWidth = this.board.length;
+		int boardHeight = this.board[0].length;
+		
 		int heightOfMostAdvancedWhite = 0;
 		int heightOfMostAdvancedBlack = 0;
 
@@ -99,25 +144,22 @@ public class State {
 		int distMostAdvancedBlack = heightOfMostAdvancedBlack;
 		int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-		return 50 - distMostAdvancedWhite + distMostAdvancedBlack;
+		return 50 + distMostAdvancedWhite - distMostAdvancedBlack;
 	}
 
 
-	public ArrayList<Move> getLegalMoves (String role, boolean isMyTurn) {
+	public ArrayList<Move> getLegalMoves (boolean isMyTurn) {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		
 		if (!isMyTurn) {
 			moves.add(new Move());
 			return moves;
 		}
-
-		/* board.length skilar x gildinu.
-	 	   board[0].length skilar y gilidnu.
-		 */
+		
 		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
+			for (int j = 0; j < board.length; j++) {
 				// White's turn
-				if (role.equals("white")) {
+				if (!isMyTurn) {
 					if (board[i][j] == BoardSquare.White) {
 						// One forward
 						if (board[i][j+1] == BoardSquare.Empty) {
@@ -135,7 +177,7 @@ public class State {
 				}
 				
 				// Black's turn
-				if (role.equals("black")) {
+				if (isMyTurn) {
 					if (board[i][j] == BoardSquare.Black) {
 						// One forward
 						if (board[i][j-1] == BoardSquare.Empty) {

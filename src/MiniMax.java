@@ -7,7 +7,7 @@ public class MiniMax {
 	int score;
 	int level;
 	public MiniMax(int level, boolean player, int alpha, int beta){
-		
+	/*
 		actions = getLegalActions();
 		if (actions == null)
 			{
@@ -31,6 +31,6 @@ public class MiniMax {
 				if (score < beta) beta = score;
 				if (alpha >= beta) break;  // alpha cut-off
 			return beta;
-			
+			*/
 	}
 }
