@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class State {
+public class State implements Cloneable {
 	
 	public BoardSquare[][] board;
 	
@@ -39,7 +39,7 @@ public class State {
 
 	public State getNextState(Move move)
 	{
-		State newState = MakeCopy();
+		State newState = clone();
 		BoardSquare movingPawn = this.board[move.fromx-1][move.fromy-1];
 		newState.board[move.fromx-1][move.fromy-1] = BoardSquare.Empty;
 		newState.board[move.tox-1][move.toy-1] = movingPawn;
@@ -110,7 +110,9 @@ public class State {
 
 	/*
 	 * Using clone() to "correctly" clone a State
-	 * State needs to implement Cloneable 
+	 * State needs to implement Cloneable
+	 * Replaced clone() with MakeCopy() because
+	 * clone() is faster. Measured.
 	 * */
 	public State clone() {
 		State newState = new State(this.board.length, this.board[0].length);
