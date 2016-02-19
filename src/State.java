@@ -36,6 +36,7 @@ public class State {
 	/*
 	 * Get the state that results from a certain move
 	 * */
+
 	public State getNextState(Move move)
 	{
 		State newState = MakeCopy();
@@ -44,6 +45,7 @@ public class State {
 		newState.board[move.tox-1][move.toy-1] = movingPawn;
 		return newState;
 	}
+
 	
 	//TODO maybee it could increase performance
 	//if we only check for a goal when we atempt to 
@@ -103,6 +105,15 @@ public class State {
 		}
 		
 		State newState = new State(newBoard);
+		return newState;
+	}
+
+	/*
+	 * Using clone() to "correctly" clone a State
+	 * State needs to implement Cloneable 
+	 * */
+	public State clone() {
+		State newState = new State(this.board.length, this.board[0].length);
 		return newState;
 	}
 	
@@ -196,5 +207,9 @@ public class State {
 			}
 		}
 		return moves;
+	}
+
+	public String toString() {
+		return "Place is: " + board[0][0];
 	}
 }
