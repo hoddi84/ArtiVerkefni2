@@ -89,7 +89,11 @@ public class State implements Cloneable {
 		//TODO if draw return 50
 		return -1;
 	}
-
+	/*
+	 * MakeCopy() is not being used atm,
+	 * instead our getNextState() function
+	 * calls clone().
+	 */
 	public State MakeCopy()
 	{
 		int width = this.board.length;
@@ -111,8 +115,8 @@ public class State implements Cloneable {
 	/*
 	 * Using clone() to "correctly" clone a State
 	 * State needs to implement Cloneable
-	 * Replaced clone() with MakeCopy() because
-	 * clone() is faster. Measured.
+	 * Replaced MakeCopy() with clone() because
+	 * clone() is faster => more State expansions.
 	 * */
 	public State clone() {
 		State newState = new State(this.board.length, this.board[0].length);
