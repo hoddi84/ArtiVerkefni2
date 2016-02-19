@@ -89,11 +89,7 @@ public class State implements Cloneable {
 		//TODO if draw return 50
 		return -1;
 	}
-	/*
-	 * MakeCopy() is not being used atm,
-	 * instead our getNextState() function
-	 * calls clone().
-	 */
+
 	public State MakeCopy()
 	{
 		int width = this.board.length;
