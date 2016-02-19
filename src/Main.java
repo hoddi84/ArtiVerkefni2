@@ -9,7 +9,7 @@ public class Main {
 
 		try{
 			// TODO: put in your agent here
-			Agent agent = new RandomAgent();
+			Agent agent = new AlphaBetaAgent();
 
 			int port=4001;
 			if(args.length>=1){
