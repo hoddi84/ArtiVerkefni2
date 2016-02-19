@@ -39,7 +39,7 @@ public class State implements Cloneable {
 
 	public State getNextState(Move move)
 	{
-		State newState = clone();
+		State newState = MakeCopy();
 		BoardSquare movingPawn = this.board[move.fromx-1][move.fromy-1];
 		newState.board[move.fromx-1][move.fromy-1] = BoardSquare.Empty;
 		newState.board[move.tox-1][move.toy-1] = movingPawn;
@@ -113,13 +113,10 @@ public class State implements Cloneable {
 	}
 
 	/*
-	 * Using clone() to "correctly" clone a State
-	 * State needs to implement Cloneable
-	 * Replaced MakeCopy() with clone() because
-	 * clone() is faster => more State expansions.
+	 * Not using.
 	 * */
 	public State clone() {
-		State newState = new State(this.board.length, this.board[0].length);
+		State newState = new State(board);
 		return newState;
 	}
 	
@@ -174,7 +171,7 @@ public class State implements Cloneable {
 		}
 		
 		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board.length; j++) {
+			for (int j = 0; j < board[0].length; j++) {
 				// White's turn
 				if (!isMyTurn) {
 					if (board[i][j] == BoardSquare.White) {
