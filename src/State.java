@@ -129,6 +129,25 @@ public class State implements Cloneable {
 		int heightOfMostAdvancedWhite = 0;
 		int heightOfMostAdvancedBlack = 0;
 
+		int nrOfWhites = 0;
+		int nrOfBlacks = 0;
+
+		// Count pawns
+		for (int j = 0; j < boardHeight; j++) {
+
+			for (int i = 0; i < boardWidth; i++) {
+				if (board[i][j] == BoardSquare.Black)
+				{
+					nrOfBlacks += 1;
+				}
+				if (board[i][j] == BoardSquare.White)
+				{
+					nrOfWhites += 1;
+				}
+
+			}
+		}
+
 		blackLoop:
 		for (int j = 0; j < boardHeight; j++)
 		{
@@ -158,7 +177,7 @@ public class State implements Cloneable {
 		int distMostAdvancedBlack = heightOfMostAdvancedBlack;
 		int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-		return 50 + distMostAdvancedWhite - distMostAdvancedBlack;
+		return 50 + distMostAdvancedWhite - distMostAdvancedBlack - nrOfWhites + nrOfBlacks;
 	}
 
 
