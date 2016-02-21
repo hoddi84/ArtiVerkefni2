@@ -5,63 +5,66 @@ import java.util.concurrent.TimeoutException;
 
 public class MiniMax {
 
-	
-	public static miniResult miniMax(State state, int depth, boolean isMyTurn, 
-			int alpha, int beta, Move actionTaken, long finishBy) throws Exception{
-		
+
+	public static miniResult miniMax(State state, int depth, boolean isMyTurn,
+									 int alpha, int beta, Move actionTaken, long finishBy) throws Exception{
+
 		if(System.currentTimeMillis() > finishBy)
 		{
 			throw new Exception("clock taem");
 		}
-		
-		int score;
+
 		ArrayList<Move> actions = new ArrayList<Move>();
 		//TODO I think we are calling legalmoves 2x check it out.
 		if(depth == 0 || state.getUtility(isMyTurn) != -1)
-		{	
-			score = state.evaluate();
-			return new miniResult(score,actionTaken);	
+		{
+			return new miniResult(state.evaluate(),actionTaken);
 		}
-		
+
 		actions = state.getLegalMoves(isMyTurn);
 
 		if (isMyTurn){
-			score = Integer.MIN_VALUE;
+			int score = Integer.MIN_VALUE;
+			miniResult bestChoice = null;
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
-				score = Math.max(score,miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy).score);
-				alpha = Math.max(alpha, score);
+				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
+				if (score < currentResult.score)
+				{
+					bestChoice = currentResult;
+				}
+				alpha = Math.max(alpha, bestChoice.score);
 				if (beta <= alpha) break; // beta cut-off
-				return new miniResult(score, action);
-				//return score;	
 			}
+			return bestChoice;
 		}
 		else{
-			score = Integer.MAX_VALUE;
+			int score = Integer.MAX_VALUE;
+			miniResult bestChoice = null;
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
-				score = Math.min(score, miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy).score);
-				beta = Math.min(beta, score);
+				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
+				if (score > currentResult.score)
+				{
+					bestChoice = currentResult;
+				}
+				beta = Math.min(beta, bestChoice.score);
 				if (beta <= alpha) break; // alpha cut-off
-				return new miniResult(score, action);
-				//return score;
-				
-			}			
+			}
+			return bestChoice;
 		}
-		
-		return null;		
 	}
-	
+
 	public static Move iterativeDeepening(State startState,long finishBy)
 	{	miniResult result = new miniResult(0,null);
 		int i = 1;
 		while (System.currentTimeMillis()<=finishBy)
 		{
 			try {
-				result = miniMax(startState, i, true, 0, 0, null, finishBy);
-			}	
+				result = miniMax(startState, i, true, Integer.MIN_VALUE, Integer.MAX_VALUE, null, finishBy);
+			}
 			catch (Exception e ){
 				System.out.println(e.getMessage());
 			}
