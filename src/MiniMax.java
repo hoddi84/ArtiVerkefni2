@@ -29,6 +29,7 @@ public class MiniMax {
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
+				if (newState.getUtility(isMyTurn) == 100) return new miniResult(100, action);
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
 				if (bestChoice.score < currentResult.score)
 				{
@@ -47,6 +48,7 @@ public class MiniMax {
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
+				if (newState.getUtility(isMyTurn) == 0) return new miniResult(0, action);
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
 				if (bestChoice.score > currentResult.score)
 				{
