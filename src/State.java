@@ -135,6 +135,9 @@ public class State implements Cloneable {
 		int whiteThreatened = 0;
 		int blackThreatened = 0;
 
+		int whiteDefended = 0;
+		int blackDefended = 0;
+
 		
 		// Count white pawns who are currently threatened.
 		for (int j = 0; j < boardHeight; j++)
@@ -241,10 +244,64 @@ public class State implements Cloneable {
 			}
 		}
 
+		// Number of white pawns defended.
+		for (int j = 0; j < boardHeight; j++)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.White)
+				{
+					// defended back left.
+					if (i-1 >= 0 && j-1 >= 0)
+					{
+						if (board[i - 1][j - 1] == BoardSquare.White)
+						{
+							whiteDefended += 1;
+						}
+					}
+					// defended back right.
+					if (i+1 <= boardWidth-1 && j-1 >= 0)
+					{
+						if (board[i + 1][j - 1] == BoardSquare.White)
+						{
+							whiteDefended += 1;
+						}
+					}
+				}
+			}
+		}
+		// Number of black pawns defended.
+		for (int j = 0; j < boardHeight; j++)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.Black)
+				{
+					// defended back left.
+					if (i-1 >= 0 && j+1 <= boardHeight-1)
+					{
+						if (board[i - 1][j + 1] == BoardSquare.Black)
+						{
+							whiteDefended += 1;
+						}
+					}
+					// defended back right.
+					if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1)
+					{
+						if (board[i + 1][j + 1] == BoardSquare.Black)
+						{
+							whiteDefended += 1;
+						}
+					}
+				}
+			}
+		}
+
+
 		int distMostAdvancedBlack = heightOfMostAdvancedBlack;
 		int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-		return 50 + (distMostAdvancedWhite - distMostAdvancedBlack) + 5*(-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened);
+		return 50 + (distMostAdvancedWhite - distMostAdvancedBlack) + 5*(-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended);
 	}
 
 
