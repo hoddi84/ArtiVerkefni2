@@ -32,7 +32,9 @@ public class MiniMax {
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
 				if (score < currentResult.score)
 				{
+					//bestChoice = currentResult;
 					bestChoice = currentResult;
+					bestChoice.action = action;
 				}
 				alpha = Math.max(alpha, bestChoice.score);
 				if (beta <= alpha) break; // beta cut-off
@@ -48,7 +50,9 @@ public class MiniMax {
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
 				if (score > currentResult.score)
 				{
+					//bestChoice = currentResult;
 					bestChoice = currentResult;
+					bestChoice.action = action;
 				}
 				beta = Math.min(beta, bestChoice.score);
 				if (beta <= alpha) break; // alpha cut-off

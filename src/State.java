@@ -129,6 +129,90 @@ public class State implements Cloneable {
 		int heightOfMostAdvancedWhite = 0;
 		int heightOfMostAdvancedBlack = 0;
 
+		int nrOfWhites = 0;
+		int nrOfBlacks = 0;
+
+		int whiteThreatened = 0;
+		int blackThreatened = 0;
+
+		// Count white pawns who are currently threatened.
+		for (int j = 0; j < boardHeight; j++)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.White){
+
+					// Capture left.
+					if (i-1 >= 0 )
+					{
+						if (board[i - 1][j + 1] == BoardSquare.Black)
+						{
+							whiteThreatened += 1;
+						}
+					}
+					// Capture right.
+					if (i+1 <= boardWidth-1)
+					{
+						if (board[i + 1][j + 1] == BoardSquare.Black)
+						{
+							whiteThreatened += 1;
+						}
+					}
+				}
+			}
+		}
+
+		// Count black pawns who are currently threatened.
+		for (int j = 0; j < boardHeight; j++)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.Black)
+				{
+					// Capture left.
+					if (i-1 >= 0 )
+					{
+						if (board[i - 1][j - 1] == BoardSquare.White)
+						{
+							blackThreatened += 1;
+						}
+					}
+					// Capture right.
+					if (i+1 <= boardWidth-1)
+					{
+						if (board[i + 1][j - 1] == BoardSquare.White)
+						{
+							blackThreatened += 1;
+						}
+					}
+				}
+			}
+		}
+
+
+		// Count black pawns.
+		for (int j = 0; j < boardHeight; j++)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.Black)
+				{
+					nrOfBlacks += 1;
+				}
+			}
+		}
+		// Count white pawns.
+		for (int j = 0; j < boardHeight; j++)
+		{
+			for (int i = 0; i < boardWidth; i++)
+			{
+				if (board[i][j] == BoardSquare.White)
+				{
+					nrOfWhites += 1;
+				}
+			}
+		}
+
 		blackLoop:
 		for (int j = 0; j < boardHeight; j++)
 		{
@@ -158,7 +242,7 @@ public class State implements Cloneable {
 		int distMostAdvancedBlack = heightOfMostAdvancedBlack;
 		int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-		return 50 + distMostAdvancedWhite - distMostAdvancedBlack;
+		return 50 + distMostAdvancedWhite - distMostAdvancedBlack - nrOfWhites + nrOfBlacks + whiteThreatened - blackThreatened;
 	}
 
 
