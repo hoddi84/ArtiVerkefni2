@@ -24,16 +24,16 @@ public class MiniMax {
 		actions = state.getLegalMoves(isMyTurn);
 
 		if (isMyTurn){
-			int score = Integer.MIN_VALUE;
-			miniResult bestChoice = null;
+			//int score = Integer.MIN_VALUE;
+			miniResult bestChoice = new miniResult(Integer.MIN_VALUE, null);
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
-				if (score < currentResult.score)
+				if (bestChoice.score < currentResult.score)
 				{
 					//bestChoice = currentResult;
-					bestChoice = currentResult;
+					bestChoice.score = currentResult.score;
 					bestChoice.action = action;
 				}
 				alpha = Math.max(alpha, bestChoice.score);
@@ -42,16 +42,16 @@ public class MiniMax {
 			return bestChoice;
 		}
 		else{
-			int score = Integer.MAX_VALUE;
-			miniResult bestChoice = null;
+			//int score = Integer.MAX_VALUE;
+			miniResult bestChoice = new miniResult(Integer.MAX_VALUE, null);
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, alpha, beta, action, finishBy);
-				if (score > currentResult.score)
+				if (bestChoice.score > currentResult.score)
 				{
 					//bestChoice = currentResult;
-					bestChoice = currentResult;
+					bestChoice.score = currentResult.score;
 					bestChoice.action = action;
 				}
 				beta = Math.min(beta, bestChoice.score);

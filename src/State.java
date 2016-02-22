@@ -135,6 +135,7 @@ public class State implements Cloneable {
 		int whiteThreatened = 0;
 		int blackThreatened = 0;
 
+		/*
 		// Count white pawns who are currently threatened.
 		for (int j = 0; j < boardHeight; j++)
 		{
@@ -188,6 +189,7 @@ public class State implements Cloneable {
 				}
 			}
 		}
+		*/
 
 
 		// Count black pawns.
@@ -242,7 +244,7 @@ public class State implements Cloneable {
 		int distMostAdvancedBlack = heightOfMostAdvancedBlack;
 		int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-		return 50 + distMostAdvancedWhite - distMostAdvancedBlack - nrOfWhites + nrOfBlacks + whiteThreatened - blackThreatened;
+		return 50 + distMostAdvancedWhite - distMostAdvancedBlack - 5*nrOfWhites + nrOfBlacks;// + whiteThreatened - blackThreatened;
 	}
 
 
