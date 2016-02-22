@@ -7,11 +7,11 @@ public class MiniMax {
 
 
 	public static miniResult miniMax(State state, int depth, boolean isMyTurn,
-									 int alpha, int beta, Move actionTaken, long finishBy) throws Exception{
+									 int alpha, int beta, Move actionTaken, long finishBy) throws BreakthroughTimoutException{
 
 		if(System.currentTimeMillis() > finishBy)
 		{
-			throw new Exception("clock taem");
+			throw new BreakthroughTimoutException("clock taem");
 		}
 
 		ArrayList<Move> actions = new ArrayList<Move>();
@@ -65,7 +65,7 @@ public class MiniMax {
 			try {
 				result = miniMax(startState, i, true, Integer.MIN_VALUE, Integer.MAX_VALUE, null, finishBy);
 			}
-			catch (Exception e ){
+			catch (BreakthroughTimoutException e ){
 				System.out.println(e.getMessage());
 			}
 			i++;
@@ -74,4 +74,3 @@ public class MiniMax {
 	}
 
 }
-

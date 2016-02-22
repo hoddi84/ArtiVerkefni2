@@ -58,13 +58,14 @@ public class AlphaBetaAgent implements Agent
 		{
 			return "noop";
 		}
+		
 		String moveString = "(move " +
-			nextMove.fromx + " " +
-			nextMove.fromy + " " +
-			nextMove.tox + " " +
-			nextMove.toy + " " +
-			")";
-
+		nextMove.fromx + " " +
+		nextMove.fromy + " " +
+		nextMove.tox + " " +
+		nextMove.toy + " " +
+		")";
+		
 		//TODO return the right action
 		return moveString;
 	}
