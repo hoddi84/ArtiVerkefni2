@@ -121,6 +121,7 @@ public class State implements Cloneable {
 	}
 	
 	/* A state evaluation */
+	// Not used from here. Is in Evaluate class.
 	public int evaluate()
 	{
 		int boardWidth = this.board.length;
