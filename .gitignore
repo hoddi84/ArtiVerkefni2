@@ -1,12 +1,1 @@
 *.class
-*.class
-
-bin/Agent.class
-
-bin/State.class
-
-bin/NanoHTTPD.class
-
-*.class
-
-*.class
