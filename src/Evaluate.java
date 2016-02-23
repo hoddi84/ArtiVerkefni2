@@ -67,6 +67,8 @@ public class Evaluate {
         int whiteDefended = 0;
         int blackDefended = 0;
 
+        int distToHomeWhite = 0;
+        int distToHomeBlack = 0;
 
         // Count white pawns who are currently threatened.
         for (int j = 0; j < boardHeight; j++)
@@ -225,12 +227,31 @@ public class Evaluate {
                 }
             }
         }
+        // Gives value to distance from home.
+        for (int j = 0; j < boardHeight; j++) {
+            for (int i = 0; i < boardWidth; i++) {
+                if (state.board[i][j] == BoardSquare.White) {
+                    if (j-1 >= 0) {
+                        if (state.board[i][j - 1] == BoardSquare.Empty) {
+                            distToHomeWhite += 1;
+                        }
+                    }
+                }
+                if (state.board[i][j] == BoardSquare.Black) {
+                    if (j+1 <= boardHeight-1) {
+                        if (state.board[i][j + 1] == BoardSquare.Empty) {
+                            distToHomeBlack += 1;
+                        }
+                    }
+                }
+            }
+        }
 
 
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-        return 50 + (distMostAdvancedWhite - distMostAdvancedBlack) + 5*(-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended);
+        return 50 + (distMostAdvancedWhite - distMostAdvancedBlack) + (-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite);
 
     }
 }
