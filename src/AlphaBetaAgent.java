@@ -43,6 +43,7 @@ public class AlphaBetaAgent implements Agent
     		// TODO: 1. update your internal world model according to the action that was just executed
     		
    			Move lastM = new Move(x1-1,y1-1,x2-1,y2-1);
+
    			currentState = currentState.getNextState(lastM);
     	}
     	
