@@ -5,6 +5,7 @@ tmp/
 *.bak
 *.swp
 *~.nib
+*.jar
 local.properties
 .settings/
 .loadpath
