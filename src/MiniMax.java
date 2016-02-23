@@ -18,7 +18,6 @@ public class MiniMax {
 		//TODO I think we are calling legalmoves 2x check it out.
 		if(depth == 0 || state.getUtility(isMyTurn) != -1)
 		{
-			//return new miniResult(state.evaluate(),actionTaken);
 			return new miniResult(Evaluate.heuristicAdvanced(state),actionTaken);
 		}
 

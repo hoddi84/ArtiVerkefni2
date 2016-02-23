@@ -2,7 +2,9 @@
  * Created by HörðurMár on 19.2.2016.
  */
 public class Evaluate {
+
     /*
+     * A state evaluation.
      * Here we can have multiple heuristics.
      * We have two "different" heuristics.
      * heuristicSimple is: 50 + distMostAdvancedWhite - distMostAdvancedBlack;
