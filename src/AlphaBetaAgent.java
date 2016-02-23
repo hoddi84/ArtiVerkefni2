@@ -53,7 +53,7 @@ public class AlphaBetaAgent implements Agent
     	Move nextMove = new Move();
 		myTurn = !myTurn;
 		if (myTurn) {
-			nextMove = MiniMax.iterativeDeepening(currentState, finishBy);
+			nextMove = MiniMax.iterativeDeepening(currentState, finishBy, myTurn);
 		}
 		else
 		{

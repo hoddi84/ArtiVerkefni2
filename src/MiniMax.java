@@ -64,13 +64,13 @@ public class MiniMax {
 		}
 	}
 
-	public static Move iterativeDeepening(State startState,long finishBy)
+	public static Move iterativeDeepening(State startState,long finishBy, boolean myTurn)
 	{	miniResult result = new miniResult(0,null);
 		int i = 1;
 		while (System.currentTimeMillis()<=finishBy)
 		{
 			try {
-				result = miniMax(startState, i, true, Integer.MIN_VALUE, Integer.MAX_VALUE, null, finishBy);
+				result = miniMax(startState, i, myTurn, Integer.MIN_VALUE, Integer.MAX_VALUE, null, finishBy);
 				if (result.score == 100) break;
 			}
 			catch (BreakthroughTimoutException e ){
