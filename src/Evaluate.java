@@ -274,7 +274,15 @@ public class Evaluate {
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-        return 50 + (distMostAdvancedWhite - distMostAdvancedBlack) + (-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite);
-
+        if (role == Role.Black) {
+            return 50 + (distMostAdvancedWhite - distMostAdvancedBlack)
+                      + (-nrOfWhites + nrOfBlacks)
+                      + (whiteThreatened - blackThreatened)
+                      + (blackDefended - whiteDefended)
+                      + (distToHomeBlack - distToHomeWhite);
+        }
+        else {
+            return 50 - ((distMostAdvancedWhite - distMostAdvancedBlack) + (-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite));
+        }
     }
 }
