@@ -10,7 +10,7 @@ public class Evaluate {
      * heuristicSimple is: 50 + distMostAdvancedWhite - distMostAdvancedBlack;
      * heuristicAdvanced is: return 50 + (distMostAdvancedWhite - distMostAdvancedBlack) + 5*(-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended);
      */
-    public static int heuristicSimple(State state)
+    public static int heuristicSimple(State state, Role role)
     {
         int boardWidth = state.board.length;
         int boardHeight = state.board[0].length;
@@ -50,7 +50,7 @@ public class Evaluate {
         return 50 + distMostAdvancedWhite - distMostAdvancedBlack;
     }
 
-    public static int heuristicAdvanced(State state) {
+    public static int heuristicAdvanced(State state, Role role) {
 
         int boardWidth = state.board.length;
         int boardHeight = state.board[0].length;
@@ -69,6 +69,9 @@ public class Evaluate {
 
         int distToHomeWhite = 0;
         int distToHomeBlack = 0;
+
+        int whiteMobility = 0;
+        int blackMobility = 0;
 
         // Count white pawns who are currently threatened.
         for (int j = 0; j < boardHeight; j++)
@@ -246,12 +249,40 @@ public class Evaluate {
                 }
             }
         }
-
+        // Gives value to pawns mobility.
+        for (int j = 0; j < boardHeight; j++) {
+            for (int i = 0; i < boardWidth; i++) {
+                // Value to whites.
+                if (state.board[i][j] == BoardSquare.White) {
+                    for (int k = j; k < boardHeight; k++) {
+                        if (state.board[i][k] == BoardSquare.Empty) {
+                            whiteMobility += 1;
+                        }
+                    }
+                }
+                // Value to blacks.
+                if (state.board[i][j] == BoardSquare.Black) {
+                    for (int k = j; k > 0; k--) {
+                        if (state.board[i][k] == BoardSquare.Empty) {
+                            blackMobility += 1;
+                        }
+                    }
+                }
+            }
+        }
 
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-        return 50 + (distMostAdvancedWhite - distMostAdvancedBlack) + (-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite);
-
+        if (role == Role.Black) {
+            return 50 + (distMostAdvancedWhite - distMostAdvancedBlack)
+                      + (-nrOfWhites + nrOfBlacks)
+                      + (whiteThreatened - blackThreatened)
+                      + (blackDefended - whiteDefended)
+                      + (distToHomeBlack - distToHomeWhite);
+        }
+        else {
+            return 50 - ((distMostAdvancedWhite - distMostAdvancedBlack) + (-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite));
+        }
     }
 }

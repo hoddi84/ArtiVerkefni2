@@ -50,10 +50,15 @@ public class AlphaBetaAgent implements Agent
     	/* Update the state based on the last move */
     	
     	// update turn (above that line it myTurn is still for the previous state)
+    	Role agentRole = Role.Black;
+    	if (this.role == "white")
+    	{
+    		agentRole = Role.White;
+    	}
     	Move nextMove = new Move();
 		myTurn = !myTurn;
 		if (myTurn) {
-			nextMove = MiniMax.iterativeDeepening(currentState, finishBy, myTurn);
+			nextMove = MiniMax.iterativeDeepening(currentState, finishBy, myTurn, agentRole);
 		}
 		else
 		{

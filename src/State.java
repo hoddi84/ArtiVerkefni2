@@ -54,12 +54,13 @@ public class State implements Cloneable {
 
 	/*
 	 * Get the state of the game
-	 * Returns 100 if black has won
-	 * Return 0 if white has won
-	 * Return 50 if there is a draw
-	 * Returns -1 if no one has won yet
+	 * role is the role of the agent
+	 * If the agent has won 100 is returned
+	 * If the agent has lost 0 is returned
+	 * If there is a draw 50 is returned
+	 * If no one has one -1 is returned
 	 * */
-	public int getUtility(boolean isMyTurn)
+	public int getUtility(Role agentRole, Role currentRole)
 	{
 		int boardWidth = this.board.length;
 		int boardHeight = this.board[0].length;
@@ -68,19 +69,33 @@ public class State implements Cloneable {
 		{
 			if (board[i][boardHeight-1] == BoardSquare.White)
 			{
-				return 0;
+				if (agentRole == Role.White)
+				{
+					return 100;
+				}
+				else
+				{
+					return 0;
+				}
 			}
 		}
 		for (int i = 0; i < boardWidth; i++)
 		{
 			if (board[i][0] == BoardSquare.Black)
 			{
-				return 100;
+				if (agentRole == Role.Black)
+				{
+					return 100;
+				}
+				else
+				{
+					return 0;
+				}
 			}
 		}
 		
 		//TODO maybee this is not necessary
-		ArrayList<Move> legalMoves = getLegalMoves (isMyTurn);
+		ArrayList<Move> legalMoves = getLegalMoves (currentRole);
 		if (legalMoves.isEmpty())
 		{
 			return 50;
@@ -112,7 +127,14 @@ public class State implements Cloneable {
 		return newState;
 	}
 
-	public ArrayList<Move> getLegalMoves (boolean isMyTurn) {
+	/*
+	 * Get the legal moves for the current player
+	 * currentPlayersRole is the role of the current player
+	 * and it can be both black or white for the same agent
+	 * because the agent checks the moves of the other player
+	 * in the minimax algorithm
+	 */
+	public ArrayList<Move> getLegalMoves (Role currentPlayersRole) {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		
 		//Need to remove this because this method should never return noop
@@ -129,7 +151,7 @@ public class State implements Cloneable {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
 				// White's turn
-				if (!isMyTurn) {
+				if (currentPlayersRole == Role.White) {
 					if (board[i][j] == BoardSquare.White) {
 						// One forward
 						if (board[i][j+1] == BoardSquare.Empty) {
@@ -156,7 +178,7 @@ public class State implements Cloneable {
 				}
 				
 				// Black's turn
-				if (isMyTurn) {
+				if (currentPlayersRole == Role.Black) {
 					if (board[i][j] == BoardSquare.Black) {
 						// One forward
 						if (board[i][j-1] == BoardSquare.Empty) {
