@@ -17,4 +17,10 @@ public class Move {
 	Move () {
 		this.action = "noop";
 	}
+	
+	public String toString()
+	{
+		return ("(move " + fromx + " " + fromy + " " + tox + " " + toy+ ")");
+	}
+
 }
