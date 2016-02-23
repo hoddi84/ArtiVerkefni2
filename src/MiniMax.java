@@ -37,7 +37,7 @@ public class MiniMax {
 		//TODO I think we are calling legalmoves 2x check it out.
 		if(depth == 0 || state.getUtility(agentRole, currentPlayer) != -1)
 		{
-			return new miniResult(Evaluate.heuristicAdvanced(state),actionTaken);
+			return new miniResult(Evaluate.heuristicAdvanced(state,agentRole),actionTaken);
 		}
 
 		actions = state.getLegalMoves(currentPlayer);
