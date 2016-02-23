@@ -112,14 +112,6 @@ public class State implements Cloneable {
 		return newState;
 	}
 
-	/*
-	 * Not using.
-	 * */
-	public State clone() {
-		State newState = new State(board);
-		return newState;
-	}
-
 	public ArrayList<Move> getLegalMoves (boolean isMyTurn) {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		
