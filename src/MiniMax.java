@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Timer;
@@ -70,10 +71,12 @@ public class MiniMax {
 		{
 			try {
 				result = miniMax(startState, i, true, Integer.MIN_VALUE, Integer.MAX_VALUE, null, finishBy);
+				if (result.score == 100) break;
 			}
 			catch (BreakthroughTimoutException e ){
 				System.out.println(e.getMessage());
 			}
+			System.out.println("Search depth: "+i);
 			i++;
 		}
 		return result.action;
