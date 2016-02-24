@@ -1,8 +1,4 @@
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.Timer;
-import java.util.concurrent.TimeoutException;
 
 public class MiniMax {
 

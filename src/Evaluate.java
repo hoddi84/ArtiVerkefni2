@@ -1,5 +1,5 @@
 /**
- * Created by HörðurMár on 19.2.2016.
+ * Created by Hordur on 19.2.2016.
  */
 public class Evaluate {
 
