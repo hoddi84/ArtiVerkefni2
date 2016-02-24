@@ -20,7 +20,7 @@ public class AlphaBetaAgent implements Agent
 		this.height = height;
 		// TODO: add your own initialization code here
 		
-		currentState = new State(width, height);
+		currentState = new State(this.width, this.height);
     }
 
 	// lastMove is null the first time nextAction gets called (in the initial state)
@@ -51,7 +51,7 @@ public class AlphaBetaAgent implements Agent
     	
     	// update turn (above that line it myTurn is still for the previous state)
     	Role agentRole = Role.Black;
-    	if (this.role == "white")
+    	if (this.role.equals("white"))
     	{
     		agentRole = Role.White;
     	}
@@ -65,12 +65,13 @@ public class AlphaBetaAgent implements Agent
 			return "noop";
 		}
 		
-		String moveString = "(move " +
-		nextMove.fromx + " " +
-		nextMove.fromy + " " +
-		nextMove.tox + " " +
-		nextMove.toy + " " +
-		")";
+//		String moveString = "(move " +
+//		nextMove.fromx + " " +
+//		nextMove.fromy + " " +
+//		nextMove.tox + " " +
+//		nextMove.toy + " " +
+//		")";
+		String moveString = nextMove.toString();
 		
 		//TODO return the right action
 		return moveString;

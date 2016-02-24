@@ -43,7 +43,6 @@ public class MiniMax {
 		actions = state.getLegalMoves(currentPlayer);
 
 		if (isMyTurn){
-			//int score = Integer.MIN_VALUE;
 			miniResult bestChoice = new miniResult(Integer.MIN_VALUE, null);
 			for (Move action : actions)
 			{	//bs state stuff need to fix
