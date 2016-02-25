@@ -47,7 +47,13 @@ public class Evaluate {
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-        return 50 + distMostAdvancedWhite - distMostAdvancedBlack;
+        if (role == Role.Black) {
+            return 50 + distMostAdvancedWhite - distMostAdvancedBlack;
+        }
+        else {
+            return 50 - (distMostAdvancedWhite - distMostAdvancedBlack);
+        }
+
     }
 
     public static int heuristicAdvanced(State state, Role role) {
@@ -282,7 +288,22 @@ public class Evaluate {
                       + (distToHomeBlack - distToHomeWhite);
         }
         else {
-            return 50 - ((distMostAdvancedWhite - distMostAdvancedBlack) + (-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened) + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite));
+            return 50 - ((distMostAdvancedWhite - distMostAdvancedBlack)
+                      + (-nrOfWhites + nrOfBlacks) + (whiteThreatened - blackThreatened)
+                      + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite));
+        }
+    }
+
+    public static int breakThroughHeuristic(State state, Role role) {
+
+        int maxClearColumnsWhite = 0;
+        int maxClearColumnsBlack = 0;
+
+        if (role == Role.Black) {
+            return 50 + (maxClearColumnsWhite - maxClearColumnsBlack);
+        }
+        else {
+            return 50 - (maxClearColumnsWhite - maxClearColumnsBlack);
         }
     }
 }
