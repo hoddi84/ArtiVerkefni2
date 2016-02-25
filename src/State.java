@@ -95,11 +95,11 @@ public class State implements Cloneable {
 		}
 		
 		//TODO maybee this is not necessary
-		ArrayList<Move> legalMoves = getLegalMoves (currentRole);
-		if (legalMoves.isEmpty())
-		{
-			return 50;
-		}
+		//ArrayList<Move> legalMoves = getLegalMoves (currentRole);
+		//if (legalMoves.isEmpty())
+		//{
+		//	return 50;
+		//}
 			
 		//TODO if draw return 50
 		return -1;

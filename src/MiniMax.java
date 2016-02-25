@@ -28,21 +28,28 @@ public class MiniMax {
 		{
 			throw new BreakthroughTimoutException("clock taem");
 		}
-
+		int util = state.getUtility(agentRole, currentPlayer);
 		ArrayList<Move> actions = new ArrayList<Move>();
 		//TODO I think we are calling legalmoves 2x check it out.
-		if(depth == 0 || state.getUtility(agentRole, currentPlayer) != -1)
-		{
+		actions = state.getLegalMoves(currentPlayer);
+		
+		if(actions.isEmpty())return new miniResult(50, actionTaken);
+		
+		if(util !=-1 ) return new miniResult(util, actionTaken);	
+		
+		if(depth == 0)
+		{	
 			return new miniResult(Evaluate.heuristicAdvanced(state,agentRole),actionTaken);
 		}
 
-		actions = state.getLegalMoves(currentPlayer);
+		
 
 		if (isMyTurn){
 			miniResult bestChoice = new miniResult(Integer.MIN_VALUE, null);
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
+				//System.out.println(newState.getUtility(agentRole, currentPlayer));
 				if (newState.getUtility(agentRole, currentPlayer) == 100) return new miniResult(100, action);
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, nextPlayerRole, alpha, beta, action, finishBy);
 				if (bestChoice.score < currentResult.score)
@@ -62,7 +69,7 @@ public class MiniMax {
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
-				
+				if (newState.getUtility(agentRole, currentPlayer) == 100) return new miniResult(100, action);
 				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, nextPlayerRole, alpha, beta, action, finishBy);
 				if (bestChoice.score > currentResult.score)
 				{
