@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class MiniMax {
 
 
-	public static miniResult miniMax(State state, int depth, boolean isMyTurn, Role currentPlayer,
+	public static miniResult miniMax(Heuristic heur, State state, int depth, boolean isMyTurn, Role currentPlayer,
 									 int alpha, int beta, Move actionTaken, long finishBy) throws BreakthroughTimoutException{
 
 		Role agentRole = currentPlayer;
@@ -36,13 +36,21 @@ public class MiniMax {
 		if(actions.isEmpty())return new miniResult(50, actionTaken);
 		
 		if(util !=-1 ) return new miniResult(util, actionTaken);	
-		
+		/*Original
 		if(depth == 0)
 		{	
 			return new miniResult(Evaluate.heuristicAdvanced(state,agentRole),actionTaken);
 		}
-
-		
+		*/
+		if(depth == 0)
+		{
+			if(heur == Heuristic.Advanced) {
+				return new miniResult(Evaluate.heuristicAdvanced(state, agentRole), actionTaken);
+			}
+			if(heur == Heuristic.Simple) {
+				return new miniResult(Evaluate.heuristicSimple(state, agentRole), actionTaken);
+			}
+		}
 
 		if (isMyTurn){
 			miniResult bestChoice = new miniResult(Integer.MIN_VALUE, null);
@@ -51,7 +59,7 @@ public class MiniMax {
 				State newState = state.getNextState(action);
 				//System.out.println(newState.getUtility(agentRole, currentPlayer));
 				if (newState.getUtility(agentRole, currentPlayer) == 100) return new miniResult(100, action);
-				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, nextPlayerRole, alpha, beta, action, finishBy);
+				miniResult currentResult = miniMax(heur, newState, depth -1, !isMyTurn, nextPlayerRole, alpha, beta, action, finishBy);
 				if (bestChoice.score < currentResult.score)
 				{
 					//bestChoice = currentResult;
@@ -70,7 +78,7 @@ public class MiniMax {
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
 				if (newState.getUtility(agentRole, currentPlayer) == 100) return new miniResult(100, action);
-				miniResult currentResult = miniMax(newState, depth -1, !isMyTurn, nextPlayerRole, alpha, beta, action, finishBy);
+				miniResult currentResult = miniMax(heur, newState, depth -1, !isMyTurn, nextPlayerRole, alpha, beta, action, finishBy);
 				if (bestChoice.score > currentResult.score)
 				{
 					//bestChoice = currentResult;
@@ -84,13 +92,13 @@ public class MiniMax {
 		}
 	}
 
-	public static Move iterativeDeepening(State startState,long finishBy, boolean myTurn, Role agentRole)
+	public static Move iterativeDeepening(Heuristic heur, State startState,long finishBy, boolean myTurn, Role agentRole)
 	{	miniResult result = new miniResult(0,null);
 		int i = 1;
 		while (System.currentTimeMillis()<=finishBy)
 		{
 			try {
-				result = miniMax(startState, i, myTurn, agentRole, Integer.MIN_VALUE, Integer.MAX_VALUE, null, finishBy);
+				result = miniMax(heur, startState, i, myTurn, agentRole, Integer.MIN_VALUE, Integer.MAX_VALUE, null, finishBy);
 				if (result.score == 100) break;
 			}
 			catch (BreakthroughTimoutException e ){

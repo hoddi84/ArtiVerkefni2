@@ -8,6 +8,11 @@ public class AlphaBetaAgent implements Agent
 	private int width, height; // dimensions of the board
 	
 	private State currentState; /* The current state of the board */
+	private Heuristic heur;
+
+	public AlphaBetaAgent(Heuristic heuristic) {
+		this.heur = heuristic;
+	}
 	
 	/*
 		init(String role, int playclock) is called once before you have to select the first action. Use it to initialize the agent. role is either "white" or "BLACK" and playclock is the number of seconds after which nextAction must return.
@@ -58,7 +63,7 @@ public class AlphaBetaAgent implements Agent
     	Move nextMove = new Move();
 		myTurn = !myTurn;
 		if (myTurn) {
-			nextMove = MiniMax.iterativeDeepening(currentState, finishBy, myTurn, agentRole);
+			nextMove = MiniMax.iterativeDeepening(heur, currentState, finishBy, myTurn, agentRole);
 		}
 		else
 		{

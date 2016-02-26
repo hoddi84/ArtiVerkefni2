@@ -48,10 +48,10 @@ public class Evaluate {
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
         if (role == Role.Black) {
-            return 50 + distMostAdvancedWhite - distMostAdvancedBlack;
+            return 50 - (distMostAdvancedWhite + distMostAdvancedBlack);
         }
         else {
-            return 50 - (distMostAdvancedWhite - distMostAdvancedBlack);
+            return 50 - (distMostAdvancedWhite + distMostAdvancedBlack);
         }
 
     }
