@@ -497,103 +497,81 @@ public class Evaluate {
         int blackDefended = 0;
         int whiteDefended = 0;
 
+        int whiteProtected = 0;
+        int blackProtected = 0;
+
         int heightOfMostAdvancedBlack = 0;
         int heightOfMostAdvancedWhite = 0;
 
-
-
-        for (int j = 0; j < boardHeight; j++)
-        {
-            for (int i = 0; i < boardWidth; i++)
-            {
+        for (int j = 0; j < boardHeight; j++) {
+            for (int i = 0; i < boardWidth; i++) {
+                
                 // Count black pawns who are threatened
                 if (state.board[i][j] == BoardSquare.White){
-
                     // Capture left.
-                    if (i-1 >= 0 && j+1 <= boardHeight-1)
-                    {
-                        if (state.board[i - 1][j + 1] == BoardSquare.Black)
-                        {
+                    if (i-1 >= 0 && j+1 <= boardHeight-1) {
+                        if (state.board[i - 1][j + 1] == BoardSquare.Black) {
                             whiteThreatened += 1;
                         }
                     }
                     // Capture right.
-                    if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1)
-                    {
-                        if (state.board[i + 1][j + 1] == BoardSquare.Black)
-                        {
+                    if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1) {
+                        if (state.board[i + 1][j + 1] == BoardSquare.Black) {
                             whiteThreatened += 1;
                         }
                     }
                 }
                 // Count black pawns who are threatened
-                if (state.board[i][j] == BoardSquare.Black)
-                {
+                if (state.board[i][j] == BoardSquare.Black) {
                     // Capture left.
-                    if (i-1 >= 0 && j-1 >= 0)
-                    {
-                        if (state.board[i - 1][j - 1] == BoardSquare.White)
-                        {
+                    if (i-1 >= 0 && j-1 >= 0) {
+                        if (state.board[i - 1][j - 1] == BoardSquare.White) {
                             blackThreatened += 1;
                         }
                     }
                     // Capture right.
-                    if (i+1 <= boardWidth-1 && j-1 >= 0)
-                    {
-                        if (state.board[i + 1][j - 1] == BoardSquare.White)
-                        {
+                    if (i+1 <= boardWidth-1 && j-1 >= 0) {
+                        if (state.board[i + 1][j - 1] == BoardSquare.White) {
                             blackThreatened += 1;
                         }
                     }
                 }
                 // Give value to number of pawns.
                 // Black pawns.
-                if (state.board[i][j] == BoardSquare.Black)
-                {
+                if (state.board[i][j] == BoardSquare.Black) {
                     nrOfBlacks += 1;
                 }
                 // White pawns
-                if (state.board[i][j] == BoardSquare.White)
-                {
+                if (state.board[i][j] == BoardSquare.White) {
                     nrOfWhites += 1;
                 }
                 // Give value to number of pawns defended.
                 // White pawns defended.
-                if (state.board[i][j] == BoardSquare.White)
-                {
+                if (state.board[i][j] == BoardSquare.White) {
                     // defended back left.
-                    if (i-1 >= 0 && j-1 >= 0)
-                    {
-                        if (state.board[i - 1][j - 1] == BoardSquare.White)
-                        {
+                    if (i-1 >= 0 && j-1 >= 0) {
+                        if (state.board[i - 1][j - 1] == BoardSquare.White) {
                             whiteDefended += 1;
                         }
                     }
                     // defended back right.
-                    if (i+1 <= boardWidth-1 && j-1 >= 0)
-                    {
-                        if (state.board[i + 1][j - 1] == BoardSquare.White)
-                        {
+                    if (i+1 <= boardWidth-1 && j-1 >= 0) {
+                        if (state.board[i + 1][j - 1] == BoardSquare.White) {
                             whiteDefended += 1;
                         }
                     }
                 }
                 // Black pawns defended.
-                if (state.board[i][j] == BoardSquare.Black)
-                {
+                if (state.board[i][j] == BoardSquare.Black) {
                     // defended back left.
-                    if (i-1 >= 0 && j+1 <= boardHeight-1)
-                    {
-                        if (state.board[i - 1][j + 1] == BoardSquare.Black)
-                        {
+                    if (i-1 >= 0 && j+1 <= boardHeight-1) {
+                        if (state.board[i - 1][j + 1] == BoardSquare.Black) {
                             blackDefended += 1;
                         }
                     }
                     // defended back right.
-                    if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1)
-                    {
-                        if (state.board[i + 1][j + 1] == BoardSquare.Black)
-                        {
+                    if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1) {
+                        if (state.board[i + 1][j + 1] == BoardSquare.Black) {
                             blackDefended += 1;
                         }
                     }
@@ -601,35 +579,71 @@ public class Evaluate {
                 // The distance from the furthermost pawn to goal.
                 // The farthest black pawn.
                 blackLoop:
-                if (state.board[i][j] == BoardSquare.Black)
-                {
+                if (state.board[i][j] == BoardSquare.Black) {
                     heightOfMostAdvancedBlack = j;
                     break blackLoop;
                 }
                 // The farthest white pawn.
                 whiteLoop:
-                if (state.board[i][j] == BoardSquare.White)
-                {
+                if (state.board[i][j] == BoardSquare.White) {
                     heightOfMostAdvancedWhite = j;
                     break whiteLoop;
+                }
+                // Gives value to pawns who protect others.
+                // White pawns.
+                if (state.board[i][j] == BoardSquare.White) {
+                    // Check left.
+                    if (i-1 >= 0 && j+1 <= boardHeight-1) {
+                        if (state.board[i - 1][j + 1] == BoardSquare.White) {
+                            whiteProtected += 1;
+                        }
+                    }
+                    if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1) {
+                        // Check right.
+                        if (state.board[i + 1][j + 1] == BoardSquare.White) {
+                            whiteProtected += 1;
+                        }
+                    }
+                }
+                // Black pawns.
+                if (state.board[i][j] == BoardSquare.Black) {
+                    // Check left.
+                    if (i-1 >= 0 && j-1 >= 0) {
+                        if (state.board[i - 1][j - 1] == BoardSquare.Black) {
+                            blackProtected += 1;
+                        }
+                    }
+                    if (i+1 <= boardWidth-1 && j-1 >= 0) {
+                        if (state.board[i + 1][j - 1] == BoardSquare.Black) {
+                            blackProtected += 1;
+                        }
+                    }
                 }
             }
         }
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
+        int valMostAdv = 1;
+        int valAmount = 1;
+        int valThreat = 1;
+        int valDefend = 1;
+        int valProtect = 1;
+
         if (role == Role.Black) {
-            return 50 + (distMostAdvancedWhite - distMostAdvancedBlack)
-                      + (-nrOfWhites + nrOfBlacks)
-                      + (whiteThreatened - blackThreatened)
-                      + (blackDefended - whiteDefended);
+            return 50 + valMostAdv*(distMostAdvancedWhite - distMostAdvancedBlack)
+                      + valAmount*(-nrOfWhites + nrOfBlacks)
+                      + valThreat*(whiteThreatened - blackThreatened)
+                      + valDefend*(blackDefended - whiteDefended)
+                      + valProtect*(blackProtected - whiteProtected);
 
         }
         else {
             return 50 - ((distMostAdvancedWhite - distMostAdvancedBlack)
                       + (-nrOfWhites + nrOfBlacks)
                       + (whiteThreatened - blackThreatened)
-                      + (blackDefended - whiteDefended));
+                      + (blackDefended - whiteDefended)
+                      + (blackProtected - whiteProtected));
         }
     }
 }
