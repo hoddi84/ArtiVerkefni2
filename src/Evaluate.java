@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Created by Hordur on 19.2.2016.
  */
@@ -503,9 +506,12 @@ public class Evaluate {
         int heightOfMostAdvancedBlack = 0;
         int heightOfMostAdvancedWhite = 0;
 
+        int whiteForward = 0;
+        int blackForward = 0;
+
         for (int j = 0; j < boardHeight; j++) {
             for (int i = 0; i < boardWidth; i++) {
-                
+
                 // Count black pawns who are threatened
                 if (state.board[i][j] == BoardSquare.White){
                     // Capture left.
@@ -576,19 +582,6 @@ public class Evaluate {
                         }
                     }
                 }
-                // The distance from the furthermost pawn to goal.
-                // The farthest black pawn.
-                blackLoop:
-                if (state.board[i][j] == BoardSquare.Black) {
-                    heightOfMostAdvancedBlack = j;
-                    break blackLoop;
-                }
-                // The farthest white pawn.
-                whiteLoop:
-                if (state.board[i][j] == BoardSquare.White) {
-                    heightOfMostAdvancedWhite = j;
-                    break whiteLoop;
-                }
                 // Gives value to pawns who protect others.
                 // White pawns.
                 if (state.board[i][j] == BoardSquare.White) {
@@ -619,6 +612,54 @@ public class Evaluate {
                         }
                     }
                 }
+                // Looking forward for path clear.
+                // White.
+                if (state.board[i][j] == BoardSquare.White) {
+                    Collection<BoardSquare> list = new ArrayList<>();
+                    for (int k = j; k < boardHeight; k++) {
+                        if (state.board[i][k] == BoardSquare.Empty || state.board[i][k] == BoardSquare.Black) {
+                            list.add(state.board[i][k]);
+                        }
+                    }
+                    if (!list.contains(BoardSquare.Black)){
+                        whiteForward += 1;
+                    }
+                }
+                // Black.
+                if (state.board[i][j] == BoardSquare.Black) {
+                    Collection<BoardSquare> list = new ArrayList<>();
+                    for (int k = j; k > 0; k--) {
+                        if (state.board[i][k] == BoardSquare.Empty || state.board[i][k] == BoardSquare.White){
+                            list.add(state.board[i][k]);
+                        }
+                    }
+                    if (!list.contains(BoardSquare.White)) {
+                        blackForward += 1;
+                    }
+                }
+
+
+            }
+        }
+        // Gives value to the most advanced pawn.
+        // Black pawn.
+        blackLoop:
+        for (int j = 0; j < boardHeight; j++) {
+            for (int i = 0; i < boardWidth; i++) {
+                if (state.board[i][j] == BoardSquare.Black) {
+                    heightOfMostAdvancedBlack = j;
+                    break blackLoop;
+                }
+            }
+        }
+        // White pawn.
+        whiteLoop:
+        for (int j = boardHeight - 1; j >= 0; j--) {
+            for (int i = 0; i < boardWidth; i++) {
+                if (state.board[i][j] == BoardSquare.White) {
+                    heightOfMostAdvancedWhite = j;
+                    break whiteLoop;
+                }
             }
         }
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
@@ -629,13 +670,15 @@ public class Evaluate {
         int valThreat = 1;
         int valDefend = 1;
         int valProtect = 1;
+        int valForward = 1;
 
         if (role == Role.Black) {
             return 50 + valMostAdv*(distMostAdvancedWhite - distMostAdvancedBlack)
                       + valAmount*(-nrOfWhites + nrOfBlacks)
                       + valThreat*(whiteThreatened - blackThreatened)
                       + valDefend*(blackDefended - whiteDefended)
-                      + valProtect*(blackProtected - whiteProtected);
+                      + valProtect*(blackProtected - whiteProtected)
+                      + valForward*(blackForward - whiteForward);
 
         }
         else {
@@ -643,7 +686,8 @@ public class Evaluate {
                       + (-nrOfWhites + nrOfBlacks)
                       + (whiteThreatened - blackThreatened)
                       + (blackDefended - whiteDefended)
-                      + (blackProtected - whiteProtected));
+                      + (blackProtected - whiteProtected)
+                      + (blackForward - whiteForward));
         }
     }
 }
