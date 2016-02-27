@@ -50,6 +50,12 @@ public class MiniMax {
 			if(heur == Heuristic.Simple) {
 				return new miniResult(Evaluate.heuristicSimple(state, agentRole), actionTaken);
 			}
+			if(heur == Heuristic.Ari) {
+				return new miniResult(Evaluate.heuristicAri(state, agentRole), actionTaken);
+			}
+			if(heur == Heuristic.Hoddi) {
+				return new miniResult(Evaluate.heuristicHoddi(state, agentRole), actionTaken);
+			}
 		}
 
 		if (isMyTurn){
