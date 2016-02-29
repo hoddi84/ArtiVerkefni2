@@ -206,7 +206,15 @@ public class State implements Cloneable {
 		return moves;
 	}
 
+	@Override
 	public String toString() {
-		return "Place is: " + board[0][0];
+		String output = "";
+		for (int j = 0; j < board[0].length; j++) {
+			for (int i = 0; i < board.length; i++) {
+				output += board[i][j].toString().charAt(0) + ", ";
+			}
+			output += "\n";
+		}
+		return output;
 	}
 }
