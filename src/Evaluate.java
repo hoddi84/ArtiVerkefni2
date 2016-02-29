@@ -299,19 +299,6 @@ public class Evaluate {
                       + (blackDefended - whiteDefended) + (distToHomeBlack - distToHomeWhite));
         }
     }
-
-    public static int breakThroughHeuristic(State state, Role role) {
-  
-        int maxClearColumnsWhite = 0;
-        int maxClearColumnsBlack = 0;
-
-        if (role == Role.Black) {
-            return 50 + (maxClearColumnsWhite - maxClearColumnsBlack);
-        }
-        else {
-            return 50 - (maxClearColumnsWhite - maxClearColumnsBlack);
-        }
-    }
     
     /* Heuristic method created by Ari */
     public static int heuristicAri(State state, Role role)
@@ -503,14 +490,17 @@ public class Evaluate {
         int blackDefended = 0;
         int whiteDefended = 0;
 
-        int whiteProtected = 0;
-        int blackProtected = 0;
+        int whiteProtectors = 0;
+        int blackProtectors = 0;
 
         int heightOfMostAdvancedBlack = 0;
         int heightOfMostAdvancedWhite = 0;
 
         int whiteForward = 0;
         int blackForward = 0;
+
+        int whiteMobility = 0;
+        int blackMobility = 0;
 
         for (int j = 0; j < boardHeight; j++) {
             for (int i = 0; i < boardWidth; i++) {
@@ -591,13 +581,13 @@ public class Evaluate {
                     // Check left.
                     if (i-1 >= 0 && j+1 <= boardHeight-1) {
                         if (state.board[i - 1][j + 1] == BoardSquare.White) {
-                            whiteProtected += 1;
+                            whiteProtectors += 1;
                         }
                     }
                     if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1) {
                         // Check right.
                         if (state.board[i + 1][j + 1] == BoardSquare.White) {
-                            whiteProtected += 1;
+                            whiteProtectors += 1;
                         }
                     }
                 }
@@ -606,12 +596,12 @@ public class Evaluate {
                     // Check left.
                     if (i-1 >= 0 && j-1 >= 0) {
                         if (state.board[i - 1][j - 1] == BoardSquare.Black) {
-                            blackProtected += 1;
+                            blackProtectors += 1;
                         }
                     }
                     if (i+1 <= boardWidth-1 && j-1 >= 0) {
                         if (state.board[i + 1][j - 1] == BoardSquare.Black) {
-                            blackProtected += 1;
+                            blackProtectors += 1;
                         }
                     }
                 }
@@ -638,6 +628,23 @@ public class Evaluate {
                     }
                     if (!list.contains(BoardSquare.White)) {
                         blackForward += 1;
+                    }
+                }
+                // Pawns mobility.
+                // Value to whites.
+                if (state.board[i][j] == BoardSquare.White) {
+                    for (int k = j; k < boardHeight; k++) {
+                        if (state.board[i][k] == BoardSquare.Empty) {
+                            whiteMobility += 1;
+                        }
+                    }
+                }
+                // Value to blacks.
+                if (state.board[i][j] == BoardSquare.Black) {
+                    for (int k = j; k > 0; k--) {
+                        if (state.board[i][k] == BoardSquare.Empty) {
+                            blackMobility += 1;
+                        }
                     }
                 }
 
@@ -668,29 +675,32 @@ public class Evaluate {
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-        int valMostAdv = 1;
+        int valMostAdv = 3;
         int valAmount = 1;
         int valThreat = 1;
         int valDefend = 1;
-        int valProtect = 1;
+        int valProtect = 3;
         int valForward = 1;
+        int valMobility = -2;
 
         if (role == Role.Black) {
             return 50 + valMostAdv*(distMostAdvancedWhite - distMostAdvancedBlack)
                       + valAmount*(-nrOfWhites + nrOfBlacks)
                       + valThreat*(whiteThreatened - blackThreatened)
                       + valDefend*(blackDefended - whiteDefended)
-                      + valProtect*(blackProtected - whiteProtected)
-                      + valForward*(blackForward - whiteForward);
+                      + valProtect*(blackProtectors - whiteProtectors)
+                      + valForward*(blackForward - whiteForward)
+                      + valMobility*(whiteMobility - blackMobility);
 
         }
         else {
-            return 50 - ((distMostAdvancedWhite - distMostAdvancedBlack)
-                      + (-nrOfWhites + nrOfBlacks)
-                      + (whiteThreatened - blackThreatened)
-                      + (blackDefended - whiteDefended)
-                      + (blackProtected - whiteProtected)
-                      + (blackForward - whiteForward));
+            return 50 - (valMostAdv*(distMostAdvancedWhite - distMostAdvancedBlack)
+                      + valAmount*(-nrOfWhites + nrOfBlacks)
+                      + valThreat*(whiteThreatened - blackThreatened)
+                      + valDefend*(blackDefended - whiteDefended)
+                      + valProtect*(blackProtectors - whiteProtectors)
+                      + valForward*(blackForward - whiteForward)
+                      + valMobility*(whiteMobility - blackMobility));
         }
     }
     public static int heuristicBinni(State state, Role role) {

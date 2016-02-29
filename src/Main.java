@@ -11,8 +11,8 @@ public class Main {
 		
 		try{
 			// TODO: put in your agent here
-			Agent agent = new AlphaBetaAgent(Heuristic.Simple);
-			Agent agent2 = new AlphaBetaAgent(Heuristic.Binni);
+			Agent agent = new AlphaBetaAgent(Heuristic.Binni);
+			Agent agent2 = new AlphaBetaAgent(Heuristic.Hoddi);
 			
 			int port = 4001, port2 = 4002;
 			if (args.length>=1){
