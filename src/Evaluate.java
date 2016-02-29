@@ -829,14 +829,12 @@ public class Evaluate {
         int valAmount = 1;
         int valThreat = 1;
         int valDefend = 1;
-        int valProtect = 1;
         int valInRow = 1;
         
         if (role == Role.Black) {
             return 50 + valAmount*(-nrOfWhites + nrOfBlacks)
                       + valThreat*(whiteThreatened - blackThreatened)
                       + valDefend*(blackDefended - whiteDefended)
-                      
             		  + valInRow*(maxBlacksInRow - maxWhitesInRow);
 
         }
@@ -844,7 +842,6 @@ public class Evaluate {
             return 50 - ((-nrOfWhites + nrOfBlacks)
                     + (whiteThreatened - blackThreatened)
                     + (blackDefended - whiteDefended)
-                   
                     + (maxWhitesInRow - maxBlacksInRow));
         }
     }
