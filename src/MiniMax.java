@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class MiniMax {
@@ -117,7 +118,7 @@ public class MiniMax {
 			catch (BreakthroughTimoutException e ){
 				System.out.println(e.getMessage());
 			}
-			System.out.println("Search depth: "+i + ", Node value: " + result.score);
+			System.out.println("Depth: "+i + ", CurrBest: " + result.action + ", Value: " + result.score);
 			i++;
 			
 			

@@ -997,14 +997,14 @@ public class Evaluate {
 		int valMostAdv = 1;
 		int valNrPawns = 2;
 		int valThreat = 1;
-		int valDefend = 3;
-		int valProtect = 2;
+//		int valDefend = 3;
+		int valProtect = 3;
 		int valForward = 1;
 		
 		int value = valMostAdv*(distMostAdvancedWhite - distMostAdvancedBlack)
 		          + valNrPawns*(-nrOfWhites + nrOfBlacks)
 		          + valThreat*(whiteThreatened - blackThreatened)
-		          + valDefend*(blackDefended - whiteDefended)
+//		          + valDefend*(blackDefended - whiteDefended)
 		          + valProtect*(blackProtectors - whiteProtectors)
 		          + valForward*(blackForward - whiteForward);
 		
