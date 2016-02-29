@@ -17,6 +17,7 @@ public class Evaluate {
     {
         int boardWidth = state.board.length;
         int boardHeight = state.board[0].length;
+        
 
         int heightOfMostAdvancedWhite = 0;
         int heightOfMostAdvancedBlack = 0;
@@ -29,6 +30,7 @@ public class Evaluate {
                 if (state.board[i][j] == BoardSquare.Black)
                 {
                     heightOfMostAdvancedBlack = j;
+                    
                     break blackLoop;
                 }
             }
@@ -49,12 +51,13 @@ public class Evaluate {
 
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
+       
 
         if (role == Role.Black) {
-            return 50 - (distMostAdvancedWhite + distMostAdvancedBlack);
+            return 50 + (distMostAdvancedWhite - distMostAdvancedBlack);
         }
         else {
-            return 50 - (distMostAdvancedWhite + distMostAdvancedBlack);
+            return 50 - (distMostAdvancedWhite - distMostAdvancedBlack);
         }
 
     }
@@ -298,7 +301,7 @@ public class Evaluate {
     }
 
     public static int breakThroughHeuristic(State state, Role role) {
-
+  
         int maxClearColumnsWhite = 0;
         int maxClearColumnsBlack = 0;
 
@@ -688,6 +691,154 @@ public class Evaluate {
                       + (blackDefended - whiteDefended)
                       + (blackProtected - whiteProtected)
                       + (blackForward - whiteForward));
+        }
+    }
+    public static int heuristicBinni(State state, Role role) {
+
+        int boardHeight = state.board[0].length;
+        int boardWidth = state.board.length;
+
+        int whiteThreatened = 0;
+        int blackThreatened = 0;
+
+        int nrOfBlacks = 0;
+        int nrOfWhites = 0;
+
+        int blackDefended = 0;
+        int whiteDefended = 0;
+
+        int whiteProtected = 0;
+        int blackProtected = 0;
+        
+        int whitesInRow = 0;
+        int blacksInRow = 0;
+        int maxWhitesInRow = 0;
+        int maxBlacksInRow = 0;
+
+        for (int j = 0; j < boardHeight; j++) {
+            for (int i = 0; i < boardWidth; i++) {
+
+                // Count black pawns who are threatened
+                if (state.board[i][j] == BoardSquare.White){
+                    // Capture left.
+                    if (i-1 >= 0 && j+1 <= boardHeight-1) {
+                        if (state.board[i - 1][j + 1] == BoardSquare.Black) {
+                            whiteThreatened += 1;
+                        }
+                    }
+                    // Capture right.
+                    if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1) {
+                        if (state.board[i + 1][j + 1] == BoardSquare.Black) {
+                            whiteThreatened += 1;
+                        }
+                    }
+                }
+                // Count black pawns who are threatened
+                if (state.board[i][j] == BoardSquare.Black) {
+                    // Capture left.
+                    if (i-1 >= 0 && j-1 >= 0) {
+                        if (state.board[i - 1][j - 1] == BoardSquare.White) {
+                            blackThreatened += 1;
+                        }
+                    }
+                    // Capture right.
+                    if (i+1 <= boardWidth-1 && j-1 >= 0) {
+                        if (state.board[i + 1][j - 1] == BoardSquare.White) {
+                            blackThreatened += 1;
+                        }
+                    }
+                }
+                // Give value to number of pawns.
+                // Black pawns.
+                if (state.board[i][j] == BoardSquare.Black) {
+                    nrOfBlacks += 1;
+                }
+                // White pawns
+                if (state.board[i][j] == BoardSquare.White) {
+                    nrOfWhites += 1;
+                }
+                // Give value to number of pawns defended.
+                // White pawns defended.
+                if (state.board[i][j] == BoardSquare.White) {
+                    // defended back left.
+                    if (i-1 >= 0 && j-1 >= 0) {
+                        if (state.board[i - 1][j - 1] == BoardSquare.White) {
+                            whiteDefended += 1;
+                        }
+                    }
+                    // defended back right.
+                    if (i+1 <= boardWidth-1 && j-1 >= 0) {
+                        if (state.board[i + 1][j - 1] == BoardSquare.White) {
+                            whiteDefended += 1;
+                        }
+                    }
+                }
+                // Black pawns defended.
+                if (state.board[i][j] == BoardSquare.Black) {
+                    // defended back left.
+                    if (i-1 >= 0 && j+1 <= boardHeight-1) {
+                        if (state.board[i - 1][j + 1] == BoardSquare.Black) {
+                            blackDefended += 1;
+                        }
+                    }
+                    // defended back right.
+                    if (i+1 <= boardWidth-1 && j+1 <= boardHeight-1) {
+                        if (state.board[i + 1][j + 1] == BoardSquare.Black) {
+                            blackDefended += 1;
+                        }
+                    }
+                }
+            
+             
+                //checks for peaces in a row
+                //white
+                for (int h = boardHeight - 1; h >= 0; h--) {
+                    for (int w = 0; w < boardWidth; w++) {
+                        if (state.board[w][h] == BoardSquare.White) {
+                            whitesInRow ++;
+  
+                        }    
+                    }
+                    if (whitesInRow > maxWhitesInRow)
+                    {
+                    	maxWhitesInRow = whitesInRow;
+                    }
+                }
+                //black
+                for (int height = 0; height < boardHeight; height++) {
+                    for (int width = 0; width < boardWidth; width++) {
+                        if (state.board[width][height] == BoardSquare.Black) {
+                            blacksInRow ++;  
+                        }
+                    }
+                    if(blacksInRow > maxBlacksInRow)
+                    	maxBlacksInRow = whitesInRow;
+                }
+
+            }
+        }
+
+        int valAmount = 1;
+        int valThreat = 1;
+        int valDefend = 1;
+        int valProtect = 1;
+        int valInRow = 1;
+        
+        if (role == Role.Black) {
+            return 50 + valAmount*(-nrOfWhites + nrOfBlacks)
+                      + valThreat*(whiteThreatened - blackThreatened)
+                      + valDefend*(blackDefended - whiteDefended)
+                      + valProtect*(blackProtected - whiteProtected)
+            		  + valInRow*(maxBlacksInRow - maxWhitesInRow);
+
+        }
+        else {
+            
+            return 50 - ((-nrOfWhites + nrOfBlacks)
+                    + (whiteThreatened - blackThreatened)
+                    + (blackDefended - whiteDefended)
+                    + (blackProtected - whiteProtected)
+                    + (maxWhitesInRow - maxBlacksInRow));
         }
     }
 }
