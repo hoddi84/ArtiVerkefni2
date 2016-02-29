@@ -56,6 +56,9 @@ public class MiniMax {
 			if(heur == Heuristic.Hoddi) {
 				return new miniResult(Evaluate.heuristicHoddi(state, agentRole), actionTaken);
 			}
+			if(heur == Heuristic.Binni) {
+				return new miniResult(Evaluate.heuristicBinni(state, agentRole), actionTaken);
+			}
 			if(heur == Heuristic.Tryggvi) {
 				return new miniResult(Evaluate.heuristicTryggvi(state, agentRole), actionTaken);
 			}
@@ -113,8 +116,10 @@ public class MiniMax {
 			catch (BreakthroughTimoutException e ){
 				System.out.println(e.getMessage());
 			}
-			System.out.println("Search depth: "+i);
+			System.out.println("Search depth: "+i + " " + result.score);
 			i++;
+			
+			
 		}
 		return result.action;
 	}
