@@ -18,6 +18,7 @@ public class Move {
 		this.action = "noop";
 	}
 	
+	@Override
 	public String toString()
 	{
 		return ("(move " + fromx + " " + fromy + " " + tox + " " + toy+ ")");

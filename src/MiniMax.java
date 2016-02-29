@@ -56,6 +56,9 @@ public class MiniMax {
 			if(heur == Heuristic.Hoddi) {
 				return new miniResult(Evaluate.heuristicHoddi(state, agentRole), actionTaken);
 			}
+			if(heur == Heuristic.Tryggvi) {
+				return new miniResult(Evaluate.heuristicTryggvi(state, agentRole), actionTaken);
+			}
 		}
 
 		if (isMyTurn){
@@ -83,7 +86,7 @@ public class MiniMax {
 			for (Move action : actions)
 			{	//bs state stuff need to fix
 				State newState = state.getNextState(action);
-				if (newState.getUtility(agentRole, currentPlayer) == 100) return new miniResult(100, action);
+				//if (newState.getUtility(agentRole, currentPlayer) == 100) return new miniResult(100, action);
 				miniResult currentResult = miniMax(heur, newState, depth -1, !isMyTurn, nextPlayerRole, alpha, beta, action, finishBy);
 				if (bestChoice.score > currentResult.score)
 				{
