@@ -675,13 +675,12 @@ public class Evaluate {
         int distMostAdvancedBlack = heightOfMostAdvancedBlack;
         int distMostAdvancedWhite = boardHeight - 1 - heightOfMostAdvancedWhite;
 
-        int valMostAdv = 3;
+        int valMostAdv = 1;
         int valAmount = 1;
         int valThreat = 1;
         int valDefend = 1;
-        int valProtect = 3;
+        int valProtect = 1;
         int valForward = 1;
-        int valMobility = -2;
 
         if (role == Role.Black) {
             return 50 + valMostAdv*(distMostAdvancedWhite - distMostAdvancedBlack)
@@ -689,8 +688,7 @@ public class Evaluate {
                       + valThreat*(whiteThreatened - blackThreatened)
                       + valDefend*(blackDefended - whiteDefended)
                       + valProtect*(blackProtectors - whiteProtectors)
-                      + valForward*(blackForward - whiteForward)
-                      + valMobility*(whiteMobility - blackMobility);
+                      + valForward*(blackForward - whiteForward);
 
         }
         else {
@@ -699,8 +697,7 @@ public class Evaluate {
                       + valThreat*(whiteThreatened - blackThreatened)
                       + valDefend*(blackDefended - whiteDefended)
                       + valProtect*(blackProtectors - whiteProtectors)
-                      + valForward*(blackForward - whiteForward)
-                      + valMobility*(whiteMobility - blackMobility));
+                      + valForward*(blackForward - whiteForward));
         }
     }
     public static int heuristicBinni(State state, Role role) {
