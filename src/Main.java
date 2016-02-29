@@ -12,7 +12,7 @@ public class Main {
 		try{
 			// TODO: put in your agent here
 			Agent agent = new AlphaBetaAgent(Heuristic.Tryggvi);
-			Agent agent2 = new AlphaBetaAgent(Heuristic.Ari);
+			Agent agent2 = new AlphaBetaAgent(Heuristic.Binni);
 			
 			int port = 4001, port2 = 4002;
 			if (args.length>=1){

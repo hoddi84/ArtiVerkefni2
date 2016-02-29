@@ -682,7 +682,7 @@ public class Evaluate {
         int valDefend = 1;
         int valProtect = 1;
         int valForward = 1;
-        int valMobility = 1;
+        int valMobility = -1;
 
         if (role == Role.Black) {
             return 50 + valMostAdv*(distMostAdvancedWhite - distMostAdvancedBlack)
